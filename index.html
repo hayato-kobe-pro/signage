@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Status of the Program - Paddock Event</title>
+    <style>
+        /* 全体的なスタイル */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #333;
+            font-size: 24px;
+        }
+        .wrap {
+            height: calc(100vw * 1.7777);
+        }
+        /* 共通スタイル */
+        .fw-b {
+            font-weight: bold !important;
+        }
+
+        .sbs {
+            font-size: 24px !important;
+            font-weight: bold !important;
+        }
+        .sbs span{
+            display: block !important;
+            font-size: 22px !important;
+            font-weight: normal !important;
+            margin-top: 2px !important;
+        }
+        .tc {
+            text-align: center !important;
+        }
+        .col-1st {
+            
+        }
+        .col-2nd {
+            width: 12%;
+        }
+        .col-3rd {
+            width: 12%;
+        }
+        .col-4th {
+            width: 17%;
+        }
+        .col-5th {
+            width: 14%;
+        }
+        .col-6th {
+            width: 15%;
+        }
+        .white {
+            color: #fff;
+        }
+        .red {
+            color: #f00;
+        }
+        .yellow {
+            color: #EFB210;
+        }
+        .gray {
+            color: #767676;
+        }
+        .green {
+            color: #57AA66;
+        }
+
+        /* ヘッダー */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #000;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 30px; /* ロゴの高さ調整 */
+            margin-right: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .title > span {
+            font-size: 18px;
+            font-weight: normal;
+            display: block;
+        }
+
+        .time {
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .time span {
+            font-size: 32px;
+            font-weight: normal;
+        }
+
+        /* メインコンテンツのコンテナ */
+        .container {
+            padding: 15px;
+        }
+
+        /* セクションタイトル */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 3px solid #000;
+        }
+
+        /* テーブル共通スタイル */
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #E9EDF6;
+        }
+
+        .status-table tr {
+            height: 90px !important;
+        }
+
+        .status-table th, .status-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            vertical-align: middle;
+        }
+        
+        /* 1行目（項目名）とセクションタイトルの背景色と文字色 */
+        .status-table tr:first-child th {
+            text-align: center;
+        }
+        .status-table tr:first-child th,
+        td.section-title {
+            min-height: 80px;
+            background-color: #7D91D2;
+            color: #fff;
+            white-space: nowrap; /* テキストの折り返しを防ぐ */
+        }
+        td.section-title span {
+            display: block;
+            font-size: 22px;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+        
+        .status-table tr:nth-child(even) {
+            background-color: #fff;
+        }
+
+        /* ステータス列の色分け */
+        .status-cell {
+            text-align: center;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .status-not-started {
+            color: #666;
+        }
+
+        /* 予約状況のアイコン */
+        .reservation-icon-0 {
+            display: block;
+            width: 18px;
+            height: 18px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 2px solid #38c172; /* 緑色の枠線 */
+            background-color: #fff;
+        }
+        
+        .reservation-icon-na {
+            border: 2px solid #ccc;
+            background-color: #f0f0f0;
+        }
+        .reservation-icon-3 {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-right: 50px solid transparent;
+            border-left: 50px solid transparent;
+            border-bottom: 60px solid #EFB210;
+            border-top: 0;
+        }
+
+        /* 混雑レベルのセル */
+        .crowd-level-cell {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .crowd-level-cell span {
+            display: block;
+        }
+        .crowd-level-cell > span  > span {
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        .crowd-level-not-crowded {
+            color: #38c172; /* Not Crowded: 緑 */
+        }
+
+        .crowd-level-crowded {
+            color: #ffc107; /* Crowded: 黄色 */
+        }
+
+        .crowd-level-very-crowded {
+            color: #dc3545; /* Very Crowded: 赤 */
+        }
+        
+        .crowd-level-na {
+            background-color: #ccc;
+            color: #333 !important;
+        }
+        .fs18 {
+            font-size: 18px !important;
+            font-weight: normal !important;
+        }
+
+        /* 英語と日本語の表示調整 */
+        .english-text {
+            display: block;
+        }
+
+        .japanese-text {
+            display: block;
+            font-size: 18px;
+            font-weight: normal;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* 特定の列幅の調整（モバイル対応を意識して最小限に） */
+        .status-table .col-time {
+            width: 8%; /* 時間列を固定 */
+            text-align: center;
+        }
+        .status-table .col-status {
+            width: 11%; /* ステータス列を固定 */
+            text-align: center;
+        }
+        .status-table .col-online,
+        .status-table .col-offline {
+            width: 10%; /* 予約列を固定 */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        <div class="header">
+            <div class="header-left">
+                <img src="placeholder_logo.png" alt="ARIGATO 25 Logo" class="logo" style="width: auto; height: 80px;">
+                <div class="title">Current Status of the program<br><span>当前活动状态</span></div>
+            </div>
+            <div class="time" id="current-time"><span>AM </span>09:55</div>
+        </div>
+
+        <div class="container">
+
+            <table class="status-table">
+                <tr>
+                    <th class="col-1st sbs white">Program<br><span>节目</span></th>
+                    <th class="col-2nd sbs white">Status<br><span>状态</span></th>
+                    <th class="col-3rd sbs white">Reservation<br>on the app<span>网上预约</span></th>
+                    <th class="col-4th sbs white">Local<br>reservation<span>本地预订</span></th>
+                    <th class="col-5th sbs white">Venues<span>场地</span></th>
+                    <th class="col-6th sbs white">Departure<span>离开</span></th>
+                </tr>
+                <tr>
+                    <td class="sbs">Kart Drive<span>卡丁车驾驶</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc"><span class="green reservation-icon-0"></span></td>
+                    <td class="sbs tc yellow">△</td>
+                    <td class="tc fw-b">P5</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Rally Car Ride<span>拉力赛车之旅</span></td>
+                    <td class="sbs tc yellow">Gate Change<span>闸口变更</span></td>
+                    <td class="sbs tc yellow">△</td>
+                    <td class="sbs tc gray">-</td>
+                    <td class="tc fw-b">P16 Dirt Area</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Racing Course Ride<span>赛车场骑行</span></td>
+                    <td class="sbs tc red">Delayed<span>延迟</span></td>
+                    <td class="sbs tc gray">-</td>
+                    <td class="sbs tc"><span class="green reservation-icon-0"></span></td>
+                    <td class="tc fw-b">Racing Course</td>
+                    <td class="tc fw-b">Terminal 2<br>（Pit-34）</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Circuit Drive<span>电路驱动</span></td>
+                    <td class="sbs tc red">Suspended<span>暂停</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Racing Course</td>
+                    <td class="tc fw-b">Terminal 2<br>（Pit-34）</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Helicopter Ride<span>直升机之旅</span></td>
+                    <td class="sbs tc gray">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Helipad</td>
+                    <td class="tc fw-b">Terminal 3</td>
+                </tr>
+                <tr>
+                    <td class="section-title sbs" colspan="6">Current Crowd Level - No Reservation Required<br><span>无需预约活动的当前拥挤程度</span></td>
+                </tr>
+                <tr>
+                    <td class="sbs">Interactive Manual Drive<span>交互式手动驾驶</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc yellow">Wait Time<br>10min<span>等待10分钟</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">NEO Steer Drive<span>NEO转向驱动</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc yellow">Wait Time<br>20min<span>等待20分钟</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">FolloMo Ride<span>FolloMo 骑行</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc red">Wait Time<br>30min<span>等待30分钟</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Small Mobility Drive<br>”Land Hopper / SWAKE”<span>小型移动驱动装置 “陆地跳跃者/SWAKE”</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc red">Wait Time<br>40min<span>等待40分钟</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Multi Pathway Drive<span>多途径驱动</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc red">Wait Time<br>50min<span>等待50分钟</span></td>
+                    <td class="tc fw-b">Short Course</td>
+                    <td class="tc fw-b">Terminal 1</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Off-road Ride<span>越野骑行</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc red">Wait Time<br>Over 60min<span>等待超过60分钟</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">Off-road Course</td>
+                </tr>
+                <tr>
+                    <td class="sbs">K-Track Ride<span>K-Track 骑行</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">P10B</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Autonomous Drive Demo. by TRI<span>自动驾驶演示。由 TRI 提供。</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Test Marketing<br>Area</td>
+                    <td class="tc fw-b">P2</td>
+                </tr>
+                <tr>
+                    <td class="sbs">FCEV heavy duty trucks Ride<span>卡丁车驾驶</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Mobilitas</td>
+                    <td class="tc fw-b">Terminal 3</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Kart Drive<span>燃料电池电动重型卡车乘车</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Mobilitas</td>
+                    <td class="tc fw-b">Terminal 3</td>
+                </tr>
+                <tr>
+                    <td class="sbs">hydrogen-engine CAROLLA CROSS Ride<span>氢动力卡罗拉十字路口骑行</span></td>
+                    <td class="sbs tc green">Available<span>提供试驾</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="sbs tc">Ended<span>结束</span></td>
+                    <td class="tc fw-b">Mobilitas</td>
+                    <td class="tc fw-b">Terminal 3</td>
+                </tr>
+                <tr>
+                    <td class="sbs">Loop Bus<span>环线巴士</span></td>
+                    <td class="sbs tc green">On Schedule<span>按计划进行</span></td>
+                    <td class="tc">-</td>
+                    <td class="tc">-</td>
+                    <td class="tc fw-b">all venues</td>
+                    <td class="tc fw-b">Terminal 3</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
